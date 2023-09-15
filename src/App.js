@@ -4,22 +4,41 @@ import Header from './componentes/Header/Header';
 import Formulario from './componentes/Formulario/Formulario';
 import MiOrg from './componentes/MiOrg';
 import Equipo from './componentes/Equipo';
+import Footer from './componentes/Footer';
 
 function App() {
   const [mostrarFormulario, actualizarMostrar] = useState(false)
+  const [colaboradores, actualizarColaboradores] = useState([
+    {
+      equipo: "Front End",
+      foto: "https://github.com/zeallotx.png",
+      nombre: "Zeallotx",
+      puesto: "Aprendiz",
+    },
+    {
+      equipo: "Programación",
+      foto: "https://github.com/harlandlohora.png",
+      nombre: "Harland",
+      puesto: "Instructor",
+    },
+    {
+      equipo: "Devops",
+      foto: "https://github.com/JeanmarieAluraLatam.png",
+      nombre: "Jean",
+      puesto: "Instructora",
+    },
+    {
+      equipo: "Programación",
+      foto: "https://github.com/christianpva.png",
+      nombre: "Christian",
+      puesto: "Instructor",
+    },
+  ]);
 
-  //Ternario --> condition ? seMuestra : noSeMuestra
-  // condition && seMuestra
-
-  const cambiarMostrar = () => {
-    actualizarMostrar(!mostrarFormulario)
-  }
-
-  //Lista de equipos
-  const equipos = [
+  const [equipos, actualizarEquipos] = useState([
     {
       titulo: "Programación",
-      colorPrimario: "57C278",
+      colorPrimario: "#57C278",
       colorSecundario: "#D9F7E9",
     },
     {
@@ -52,18 +71,67 @@ function App() {
       colorPrimario: "#FF8A29",
       colorSecundario: "#FFEEDF",
     },
-  ];
+  ]);
+  
+  //Ternario --> condition ? seMuestra : noSeMuestra
+  // condition && seMuestra
+
+  const cambiarMostrar = () => {
+    actualizarMostrar(!mostrarFormulario)
+  }
+
+  //Registrar Colaborador
+  const registrarColaborador = (colaborador) => {
+    //Spread operator
+    actualizarColaboradores([...colaboradores, colaborador])
+  }
+
+  //Eliminar Colaborador
+  const eliminarColaborador = () => {
+    
+  }
+
+  //Actualizar color de equipo
+  const actualizarColor = (color, titulo) => {
+    const equiposActualizados = equipos.map((equipo) => {
+      if (equipo.titulo === titulo) {
+        equipo.colorPrimario = color;
+      }
+      return equipo;
+    })
+    actualizarEquipos(equiposActualizados)
+  }
+
+
+
+  //Lista de equipos
 
 //
 
   return (
     <div>
       <Header />
-      {mostrarFormulario === true ? <Formulario /> : <></>}
+      {mostrarFormulario === true ? (
+        <Formulario
+          equipos={equipos.map((equipo) => equipo.titulo)}
+          registrarColaborador={registrarColaborador}
+        />
+      ) : (
+        <></>
+      )}
       <MiOrg cambiarMostrar={cambiarMostrar} />
-      {
-        equipos.map( (equipo) => <Equipo datos={equipo} key={equipo.titulo} />)
-      }
+      {equipos.map((equipo) => (
+        <Equipo
+          datos={equipo}
+          key={equipo.titulo}
+          colaboradores={colaboradores.filter(
+            (colaborador) => colaborador.equipo === equipo.titulo
+          )}
+          eliminarColaborador={eliminarColaborador}
+          actualizarColor={actualizarColor}
+        />
+      ))}
+      <Footer />
     </div>
   );
 }
