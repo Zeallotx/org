@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {v4 as uuid} from 'uuid'
 import './App.css';
 import Header from './componentes/Header/Header';
 import Formulario from './componentes/Formulario/Formulario';
@@ -10,63 +11,78 @@ function App() {
   const [mostrarFormulario, actualizarMostrar] = useState(false)
   const [colaboradores, actualizarColaboradores] = useState([
     {
+      id: uuid(),
       equipo: "Front End",
       foto: "https://github.com/zeallotx.png",
       nombre: "Zeallotx",
       puesto: "Aprendiz",
+      fav: true,
     },
     {
+      id: uuid(),
       equipo: "Programación",
       foto: "https://github.com/harlandlohora.png",
       nombre: "Harland",
       puesto: "Instructor",
+      fav: false,
     },
     {
+      id: uuid(),
       equipo: "Devops",
       foto: "https://github.com/JeanmarieAluraLatam.png",
       nombre: "Jean",
       puesto: "Instructora",
+      fav: false,
     },
     {
+      id: uuid(),
       equipo: "Programación",
       foto: "https://github.com/christianpva.png",
       nombre: "Christian",
       puesto: "Instructor",
+      fav: true,
     },
   ]);
 
   const [equipos, actualizarEquipos] = useState([
     {
+      id: uuid(),
       titulo: "Programación",
       colorPrimario: "#57C278",
-      colorSecundario: "#D9F7E9",
+      colorSecundario: "#D9F7E9", //Ya no es importante el color secundario
     },
     {
+      id: uuid(),
       titulo: "Front End",
       colorPrimario: "#82CFFA",
       colorSecundario: "#E8F8FF",
     },
     {
+      id: uuid(),
       titulo: "Data Science",
       colorPrimario: "#A6D157",
       colorSecundario: "#F0F8E2",
     },
     {
+      id: uuid(),
       titulo: "Devops",
       colorPrimario: "#E06B69",
       colorSecundario: "#FDE7E8",
     },
     {
+      id: uuid(),
       titulo: "UX y Diseño",
       colorPrimario: "#DB6EBF",
       colorSecundario: "#FAE9F5",
     },
     {
+      id: uuid(),
       titulo: "Móvil",
       colorPrimario: "#FFBA05",
       colorSecundario: "#FFF5D9",
     },
     {
+      id: uuid(),
       titulo: "Innovación y Gestión",
       colorPrimario: "#FF8A29",
       colorSecundario: "#FFEEDF",
@@ -87,14 +103,15 @@ function App() {
   }
 
   //Eliminar Colaborador
-  const eliminarColaborador = () => {
-    
+  const eliminarColaborador = (id) => {
+    const nuevosColaboradores = colaboradores.filter((colaborador) => colaborador.id !== id)
+    actualizarColaboradores(nuevosColaboradores)
   }
 
   //Actualizar color de equipo
-  const actualizarColor = (color, titulo) => {
+  const actualizarColor = (color, id) => {
     const equiposActualizados = equipos.map((equipo) => {
-      if (equipo.titulo === titulo) {
+      if (equipo.id === id) {
         equipo.colorPrimario = color;
       }
       return equipo;
@@ -108,6 +125,22 @@ function App() {
 
 //
 
+//Crear equipo
+
+const crearEquipo = (nuevoEquipo) => {
+  actualizarEquipos([...equipos, {...nuevoEquipo, id: uuid}])
+}
+
+const like = (id) => {
+  const colaboradoresActualizados = colaboradores.map((colaborador) => {
+    if (colaborador.id === id) {
+      colaborador.fav = !colaborador.fav
+    } 
+    return colaborador
+  })
+  actualizarColaboradores(colaboradoresActualizados)
+}
+
   return (
     <div>
       <Header />
@@ -115,6 +148,7 @@ function App() {
         <Formulario
           equipos={equipos.map((equipo) => equipo.titulo)}
           registrarColaborador={registrarColaborador}
+          crearEquipo={crearEquipo}
         />
       ) : (
         <></>
@@ -129,6 +163,7 @@ function App() {
           )}
           eliminarColaborador={eliminarColaborador}
           actualizarColor={actualizarColor}
+          like={like}
         />
       ))}
       <Footer />

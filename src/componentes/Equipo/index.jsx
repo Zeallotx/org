@@ -5,8 +5,8 @@ import hexToRgba from "hex-to-rgba";
 const Equipo = (props) => {
 
     //DESTRUCTURACIÓN
-    const {colorPrimario, colorSecundario, titulo} = props.datos
-    const { colaboradores, eliminarColaborador, actualizarColor } = props;
+    const {colorPrimario, colorSecundario, titulo, id} = props.datos
+    const { colaboradores, eliminarColaborador, actualizarColor, like } = props;
     //
     const backObj = {
       background: hexToRgba(colorPrimario,0.6),
@@ -24,7 +24,7 @@ const Equipo = (props) => {
               type="color"
               value={colorPrimario}
               onChange={(e) => {
-                actualizarColor(e.target.value, titulo);
+                actualizarColor(e.target.value, id);
               }}
             />
             <h3 style={styleTitulo}>{titulo}</h3>
@@ -35,6 +35,7 @@ const Equipo = (props) => {
                   key={colaborador.nombre}
                   colorPrimario={colorPrimario}
                   eliminarColaborador={eliminarColaborador}
+                  like={like}
                 />
               ))}
             </div>
